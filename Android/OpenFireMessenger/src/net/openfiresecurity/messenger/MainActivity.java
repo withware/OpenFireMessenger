@@ -12,8 +12,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO Splash Screen
-        //setContentView(R.layout.activity_main);
+        // TODO Splash Screen
+        // setContentView(R.layout.activity_main);
         startActivity(new Intent(MainActivity.this, Menu.class));
         finish();
     }

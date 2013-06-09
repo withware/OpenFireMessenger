@@ -50,8 +50,10 @@ class CheckVersion extends AsyncTask<String, Void, String> {
     @NotNull
     @Override
     protected String doInBackground(String... params) {
-        @NotNull HttpClient httpClient = new DefaultHttpClient();
-        @NotNull HttpPost httpPost = new HttpPost(Constants.URL + Constants.versionFile);
+        @NotNull
+        HttpClient httpClient = new DefaultHttpClient();
+        @NotNull
+        HttpPost httpPost = new HttpPost(Constants.URL + Constants.versionFile);
         try {
             httpPost.setHeader("User-Agent", "ImageUploaderAlex");
             HttpResponse httpResponse = httpClient.execute(httpPost);
@@ -63,11 +65,14 @@ class CheckVersion extends AsyncTask<String, Void, String> {
 
     @NotNull
     String entityToString(@NotNull HttpEntity entity) {
-        @Nullable InputStream is = null;
-        @Nullable StringBuilder str = null;
+        @Nullable
+        InputStream is = null;
+        @Nullable
+        StringBuilder str = null;
         try {
             is = entity.getContent();
-            @NotNull BufferedReader bufferedReader = new BufferedReader(
+            @NotNull
+            BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(is));
             str = new StringBuilder();
 

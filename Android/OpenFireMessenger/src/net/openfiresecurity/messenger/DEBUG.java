@@ -37,13 +37,11 @@ public class DEBUG extends Activity implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.bDebugNumber:
                 TelephonyManager mTelephonyMgr;
-                mTelephonyMgr = (TelephonyManager)
-                        getSystemService(Context.TELEPHONY_SERVICE);
+                mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
                 tvDebug.setText(mTelephonyMgr.getSimSerialNumber());
                 break;
         }
     }
-
 
 }
