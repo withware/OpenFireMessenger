@@ -9,6 +9,7 @@ Android/OpenFireMessenger/gen/
 Android/OpenFireMessenger/.settings/
 Android/OpenFireMessenger/.classpath
 Android/OpenFireMessenger/.project
+Android/OpenFireMessenger/proguard_logs/
 
 #################
 ## Java Stuff
