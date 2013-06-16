@@ -1,6 +1,4 @@
-<!--
-  ~ Copyright (c) 2013. Alexander Martinz.
-  -->
+<!-- ~ Copyright (c) 2013. Alexander Martinz. -->
 
 <resources>
 
@@ -18,7 +16,7 @@
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:windowTitleSize">30dp</item>
     </style>
 
 </resources>

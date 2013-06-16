@@ -12,16 +12,16 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
-            android:text="Sign Up!"/>
+            android:text="@string/signup"/>
 
     <CheckBox
             android:id="@+id/cbAgreement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/button1"
+            android:layout_above="@+id/bFinishSignUp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
-            android:text="TODO >> I accept the Agreement."
+            android:text="@string/agreement"
             android:visibility="invisible"/>
 
     <TextView
@@ -31,7 +31,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:text="Username"/>
+            android:text="@string/username"/>
 
     <EditText
             android:id="@+id/etUsername"
@@ -41,7 +41,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/tvUserName"
             android:ems="10"
-            android:hint="Username">
+            android:hint="@string/username">
 
         <requestFocus/>
     </EditText>
@@ -53,7 +53,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/etUsername"
-            android:text="Password"/>
+            android:text="@string/password"/>
 
     <EditText
             android:id="@+id/etPassword"
@@ -63,7 +63,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/tvPassword"
             android:ems="10"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword"/>
 
     <TextView
@@ -73,7 +73,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/etPassword"
-            android:text="Confirm Password"/>
+            android:text="@string/passwordconfirm"/>
 
     <EditText
             android:id="@+id/etPasswordConfirm"
@@ -83,7 +83,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/tvPasswordConfirm"
             android:ems="10"
-            android:hint="Confirm Password"
+            android:hint="@string/passwordconfirm"
             android:inputType="textPassword"/>
 
     <TextView
@@ -93,7 +93,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/etPasswordConfirm"
-            android:text="Email"/>
+            android:text="@string/email"/>
 
     <EditText
             android:id="@+id/etEmail"
@@ -103,7 +103,7 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/tvEmail"
             android:ems="10"
-            android:hint="Email"
+            android:hint="@string/email"
             android:inputType="textEmailAddress"/>
 
 </RelativeLayout>

@@ -1,10 +1,9 @@
 /*
- * Copyright (c) 2013. Alexander Martinz.
+ * Copyright (c) 2013. Alexander Martinz @ OpenFire Security
  */
 
 package net.openfiresecurity.messenger;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import net.openfiresecurity.helper.Constants;
@@ -14,8 +13,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,38 +21,29 @@ import java.io.InputStreamReader;
 
 class CheckVersion extends AsyncTask<String, Void, String> {
 
-    @NotNull
-    private final ProgressDialog dialog;
-    private final Menu c;
+    private final MainView c;
 
-    public CheckVersion(Menu context) {
+    public CheckVersion(MainView context) {
         c = context;
-        dialog = new ProgressDialog(c);
     }
 
     @Override
     protected void onPreExecute() {
-        dialog.setTitle("Checking!");
-        dialog.setMessage("Checking for available Updates!");
-        dialog.setCancelable(false);
-        dialog.show();
     }
 
     @Override
     protected void onPostExecute(String result) {
-        dialog.dismiss();
         c.update(result);
     }
 
-    @NotNull
     @Override
     protected String doInBackground(String... params) {
-        @NotNull
+
         HttpClient httpClient = new DefaultHttpClient();
-        @NotNull
+
         HttpPost httpPost = new HttpPost(Constants.URL + Constants.versionFile);
         try {
-            httpPost.setHeader("User-Agent", "ImageUploaderAlex");
+            httpPost.setHeader("User-Agent", "OpenFireMessengerAlex");
             HttpResponse httpResponse = httpClient.execute(httpPost);
             return (entityToString(httpResponse.getEntity()));
         } catch (Exception uee) {
@@ -63,15 +51,14 @@ class CheckVersion extends AsyncTask<String, Void, String> {
         return "-1";
     }
 
-    @NotNull
-    String entityToString(@NotNull HttpEntity entity) {
-        @Nullable
+    String entityToString(HttpEntity entity) {
+
         InputStream is = null;
-        @Nullable
+
         StringBuilder str = null;
         try {
             is = entity.getContent();
-            @NotNull
+
             BufferedReader bufferedReader = new BufferedReader(
                     new InputStreamReader(is));
             str = new StringBuilder();
