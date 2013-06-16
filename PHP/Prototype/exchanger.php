@@ -1,42 +1,43 @@
 <?php
 //includes config, functions
 //Establishes a database connection and defines the functions
-include_once "system/config.php";
-include_once "system/functions.php";
+include_once "./system/db_functions.php";
+include_once './system/db_connect.php';
+include_once './system/GCM.php';
 
-if(!checkAuth())
+$db = new DB_Functions();
+
+if(!$db->checkAuth())
 {
-	die("101");
+	$arr = array ('statuscode'=>101,'error'=>"Not authenticated");
+	die(json_encode($arr));
 }
 
 if(isset($_POST['from']) && isset($_POST['to'])){
-	//check for contacts
-	if(!checkContacts())
-	{
-		die("301");
-	}
 
 	//if file sending
 	if(isset($_FILES['file']['size'])){
 		if($_FILES['file']['size'] > 0)
 		{
 			//functions.php -> uploadFile()
-			uploadFile();
+			$db->uploadFile();
 		}
 		//if message sending
 	} else if(isset($_POST['from']) && isset($_POST['to']) && isset($_POST['content'])){
 		//functions.php -> sendMessage()
-		sendMessage();
+		$db->sendMessage();
 		//if message receiving
 	} else if (isset($_POST['from']) && isset($_POST['to'])){
 		//functions.php -> getMessage()
-		getMessageOrFile();
+		$db->getMessageOrFile();
 		//no action matched, we die
 	} else {
-		die("-1");
+		$arr = array ('statuscode'=>-1,'error'=>"Couldn't understand Request");
+		die(json_encode($arr));
 	}
 } else {
-	die("-1");
+	$arr = array ('statuscode'=>-1,'error'=>"Couldn't understand Request");
+	die(json_encode($arr));
 }
 
 ?>

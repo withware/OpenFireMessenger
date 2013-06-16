@@ -5,6 +5,8 @@ OpenFireMessenger - PHP Server Back-End
 * Alexander Martinz
 * John Hoder
 
+##Requirements
+* A Webserver with PHP, MySQL and CURL Support
 
 ##Setup
 To setup, first create a database.
