@@ -5,45 +5,57 @@
 
     <string name="app_name">OpenFireMessenger</string>
 
+    <!-- ActionBar -->
+    <string name="contacts">Contacts</string>
+
     <!-- App Status -->
     <string name="exit">Exit</string>
-    <string name="update">Update</string>
-    <string name="debug">Debug</string>
-
-    <!-- Status Codes -->
-    <string name="error">Error</string>
-    <string name="success">Success</string>
+    <string name="prefs">Preferences</string>
+    <string name="changelog">Changelog</string>
+    <string name="changelogcontent">Version 0.0.3.0 BETA:\n\n*)ActionBarSherlock\n*)HoloEverywhere</string>
 
     <!-- Signup/Login Form -->
     <string name="autologin">Save login details</string>
-    <string name="login">Login!</string>
-    <string name="signup">Sign Up!</string>
+    <string name="signin">Sign In!</string>
     <string name="agreement">I accept the Agreement.</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="passwordconfirm">Confirm Password</string>
     <string name="email">Email</string>
+    <string name="usernew">New User?</string>
+    <string name="createaccount">Create Account</string>
+    <string name="useralready">Already a Member?</string>
+    <string name="accountadd">Add Contact</string>
+    <string name="right">Right</string>
+    <string name="left">Left</string>
 
-    <!-- GCM -->
-    <string name="title_activity_main">Push Notifications</string>
-    <string name="error_config">Please set the %1$s constant and recompile the app.</string>
-    <string name="already_registered">Device is already registered on server.</string>
-    <string name="gcm_registered">From GCM: device successfully registered!</string>
-    <string name="gcm_unregistered">From GCM: device successfully unregistered!</string>
-    <string name="gcm_message">From GCM: you got message!</string>
-    <string name="gcm_error">From GCM: error (%1$s).</string>
-    <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
-    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
-    <string name="server_registering">Trying (attempt %1$d/%2$d) to register device on Server.
-    </string>
-    <string name="server_registered">From Server: successfully added device!</string>
-    <string name="server_unregistered">From Server: successfully removed device!</string>
-    <string name="server_register_error">Could not register device on Server after %1$d attempts.
-    </string>
-    <string name="server_unregister_error">Could not unregister device on Server (%1$s).</string>
-    <string name="options_register">Register</string>
-    <string name="options_unregister">Unregister</string>
-    <string name="options_clear">Clear</string>
-    <string name="options_exit">Exit</string>
+    <!-- Preferences Start -->
+    <!-- DUMMY -->
+    <string name="prefs_title_"></string>
+    <string name="prefs_summary_"></string>
+    <string name="prefs_cat_"></string>
+    <!-- Categories -->
+    <string name="prefs_cat_general">General</string>
+    <string name="prefs_cat_general_appearance">Appearance</string>
+    <string name="prefs_cat_chatsettings">Chat Settings</string>
+    <string name="prefs_cat_chatappearance">Appearance</string>
+    <string name="prefs_cat_chatcolor">Message Colors</string>
+    <string name="prefs_cat_extra">Extras</string>
+    <string name="prefs_cat_notifications">Notifications</string>
+    <string name="prefs_title_changelog">Show Changelog</string>
+    <string name="prefs_summary_changelog">Display What\'s New when App got updated.</string>
+    <string name="prefs_title_update">Auto Update</string>
+    <string name="prefs_summary_update">Check automatically for Updates.</string>
+    <string name="prefs_title_chatfonts">Font</string>
+    <string name="prefs_summary_chatfonts">Select the kind of font you would like to have.\n(n) is a normal, (b) is a bold, (l) is a light font.\nMay requires restarting of the Application!</string>
+    <string name="prefs_title_notifysound">Play Sound</string>
+    <string name="prefs_summary_notifysound">Play Sound, when a new Message is received.</string>
+    <string name="prefs_title_notifyvibration">Enable Vibration</string>
+    <string name="prefs_summary_notifyvibration">Vibrate, when a new Message is received.</string>
+    <string name="prefs_title_notifywakelock">Enable Wakelock</string>
+    <string name="prefs_summary_notifywakelock">Turn on Screen, when a new Message is received.</string>
+    <string name="prefs_title_general_animation">Use Animation</string>
+
+    <!-- Preferences End -->
 
 </resources>

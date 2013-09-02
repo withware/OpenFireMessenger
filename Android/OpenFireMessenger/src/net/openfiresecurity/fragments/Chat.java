@@ -4,169 +4,176 @@
 
 package net.openfiresecurity.fragments;
 
-import android.accounts.AccountManager;
-import android.app.Activity;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
-import net.openfiresecurity.data.PreferenceHelper;
-import net.openfiresecurity.data.SQLiteMessages;
 import net.openfiresecurity.helper.MessageSender;
+import net.openfiresecurity.helper.ResourceManager;
 import net.openfiresecurity.messenger.MainService;
 import net.openfiresecurity.messenger.MainView;
 import net.openfiresecurity.messenger.R;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.holoeverywhere.LayoutInflater;
+import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.app.Fragment;
+import org.holoeverywhere.widget.EditText;
+import org.holoeverywhere.widget.ListView;
+import org.holoeverywhere.widget.TextView;
+
+import android.accounts.AccountManager;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 public class Chat extends Fragment implements OnClickListener,
-        OnLongClickListener {
+		OnLongClickListener {
 
-    /* Delaying sending for 2 seconds */
-    private Handler mHandler = new Handler();
-    boolean canSend = true;
+	/* Delaying sending for 2 seconds */
+	private final Handler mHandler = new Handler();
+	private boolean canSend = true;
 
-    static TextView tvChatUser;
-    private String email = "";
+	private Cursor c;
 
-    EditText etChatMessage;
-    ImageView ivChatSend;
-    ListView lvChatMessages;
-    Activity context;
-    PreferenceHelper prefs;
-    ArrayAdapter<String> adapter1;
-    List<String> msg = new ArrayList<String>();
+	private static TextView tvChatUser;
+	private String email = "", name = "";
 
-    public void changeContact(String email) {
-        this.email = email;
-        tvChatUser.setText(this.email);
-        MainView.mViewPager.setCurrentItem(1);
-        refreshList();
-    }
+	private EditText etChatMessage;
+	private ImageView ivChatSend;
+	private ListView lvChatMessages;
+	private Activity context;
+	private ChatAdapter adapter;
+	ArrayList<String> msg = new ArrayList<String>();
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
+	public void changeActionBarTitle() {
+		MainView.ac.setTitle(name);
+	}
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chat, container, false);
+	public void changeContact(int id) {
+		email = MainService.contactsDB.getEmail(id);
+		name = MainService.contactsDB.getName(id);
+		MainView.ac.setTitle(name);
+		tvChatUser.setText(name);
+		MainView.mViewPager.setCurrentItem(1);
+		refreshList();
+	}
 
-        etChatMessage = (EditText) view.findViewById(R.id.etChatMessage);
-        etChatMessage.addTextChangedListener(new TextWatcher() {
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                String content = s.toString();
-                if (canSend) {
-                    if (!content.trim().isEmpty()) {
-                        ivChatSend.setVisibility(View.VISIBLE);
-                    } else {
-                        ivChatSend.setVisibility(View.INVISIBLE);
-                    }
-                }
-            }
+		View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-            }
+		etChatMessage = (EditText) view.findViewById(R.id.etChatMessage);
+		etChatMessage.setTypeface(ResourceManager.L_LATO);
+		etChatMessage.addTextChangedListener(new TextWatcher() {
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
-            }
+			@Override
+			public void afterTextChanged(Editable s) {
+				String content = s.toString();
+				if (canSend) {
+					if (!content.trim().isEmpty()) {
+						ivChatSend.setVisibility(View.VISIBLE);
+					} else {
+						ivChatSend.setVisibility(View.INVISIBLE);
+					}
+				}
+			}
 
-        });
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
 
-        tvChatUser = (TextView) view.findViewById(R.id.tvChatUser);
-        ivChatSend = (ImageView) view.findViewById(R.id.ivChatSendEnabled);
-        ivChatSend.setVisibility(View.INVISIBLE);
-        ivChatSend.setOnClickListener(this);
-        ivChatSend.setOnLongClickListener(this);
-        lvChatMessages = (ListView) view.findViewById(R.id.lvChatMessages);
-        adapter1 = new ArrayAdapter<String>(context,
-                android.R.layout.simple_list_item_1, msg);
-        lvChatMessages.setAdapter(adapter1);
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+			}
 
-        return view;
-    }
+		});
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        context = activity;
-        prefs = new PreferenceHelper(context);
-    }
+		tvChatUser = (TextView) view.findViewById(R.id.tvChatUser);
+		ivChatSend = (ImageView) view.findViewById(R.id.ivChatSendEnabled);
+		ivChatSend.setVisibility(View.INVISIBLE);
+		ivChatSend.setOnClickListener(this);
+		ivChatSend.setOnLongClickListener(this);
+		lvChatMessages = (ListView) view.findViewById(R.id.lvChatMessages);
 
-    @Override
-    public void onClick(View arg0) {
-        switch (arg0.getId()) {
-            case R.id.ivChatSendEnabled:
-                if (!(email.trim().isEmpty())) {
-                    ivChatSend.setVisibility(View.INVISIBLE);
-                    canSend = false;
-                    mHandler.removeCallbacks(mUpdateTimeTask);
-                    mHandler.postDelayed(mUpdateTimeTask, 2000);
+		lvChatMessages.setDivider(null);
+		lvChatMessages.setDividerHeight(0);
 
-                    String message = etChatMessage.getText().toString();
-                    MainService.createMessage("<-- " + message, email);
-                    new MessageSender().execute(
-                            AccountManager.get(context).getUserData(
-                                    MainView.account, "email"),
-                            email,
-                            message,
-                            AccountManager.get(context).getUserData(
-                                    MainView.account, "hash"));
-                    etChatMessage.setText("");
-                } else {
-                    MainView.mViewPager.setCurrentItem(0);
-                }
-                break;
-        }
-    }
+		adapter = new ChatAdapter(getActivity(), c);
+		lvChatMessages.setAdapter(adapter);
 
-    @Override
-    public boolean onLongClick(View v) {
-        return false;
-    }
+		return view;
+	}
 
-    private Runnable mUpdateTimeTask = new Runnable() {
-        @Override
-        public void run() {
-            canSend = true;
-            if (!etChatMessage.getText().toString().trim().isEmpty()) {
-                ivChatSend.setVisibility(View.VISIBLE);
-            }
-        }
-    };
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		context = activity;
+		c = null;
+	}
 
-    /**
-     * Refreshes the Chat Window
-     */
-    public void refreshList() {
-        msg.clear();
-        List<SQLiteMessages> allMessages = MainService.getAllMessages(email);
-        SQLiteMessages[] msg1 = allMessages
-                .toArray(new SQLiteMessages[allMessages.size()]);
-        for (SQLiteMessages msg2 : msg1) {
-            msg.add(msg2.getContent());
-        }
-        adapter1.notifyDataSetChanged();
-    }
+	@Override
+	public void onClick(View arg0) {
+		switch (arg0.getId()) {
+		case R.id.ivChatSendEnabled:
+			if (!(email.trim().isEmpty())) {
+				ivChatSend.setVisibility(View.INVISIBLE);
+				canSend = false;
+				mHandler.removeCallbacks(mUpdateTimeTask);
+				mHandler.postDelayed(mUpdateTimeTask, 2000);
+
+				String message = MainService.filter(etChatMessage.getText()
+						.toString());
+				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm",
+						Locale.getDefault());
+				String currentTime = sdf.format(new Date());
+				MainService.createMessage(message, email, "1", currentTime);
+				new MessageSender().execute(
+						AccountManager.get(context).getUserData(
+								MainView.account, "email"),
+						email,
+						message,
+						AccountManager.get(context).getUserData(
+								MainView.account, "hash"));
+				etChatMessage.setText("");
+			} else {
+				MainView.mViewPager.setCurrentItem(0);
+			}
+			break;
+		}
+	}
+
+	@Override
+	public boolean onLongClick(View v) {
+		return false;
+	}
+
+	private final Runnable mUpdateTimeTask = new Runnable() {
+		@Override
+		public void run() {
+			canSend = true;
+			if (!etChatMessage.getText().toString().trim().isEmpty()) {
+				ivChatSend.setVisibility(View.VISIBLE);
+			}
+		}
+	};
+
+	/**
+	 * Refreshes the Chat Window
+	 */
+	public void refreshList() {
+		c = MainService.messagesDB.getCursorFromContact(email);
+		adapter.swapCursor(c);
+	}
 }

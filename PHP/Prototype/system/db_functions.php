@@ -204,6 +204,11 @@ class DB_Functions {
 		$sender = $_POST['from'];
 		$receiver = $_POST['to'];
 		$content = $_POST['content'];
+		if(isset($_POST['time'])){
+		$time = $_POST['time'];
+		} else {
+		$time = "! ".date("H:i");
+		}
 		$messages = "INSERT INTO messages (message_from, message_to, message_content, message_seen, is_file) VALUES ('$sender', '$receiver', '$content', 0, 0)";
 		mysql_query($messages) or die(mysql_error());
 
@@ -211,7 +216,7 @@ class DB_Functions {
 		list($regId) = mysql_fetch_array($result);
 
 		$registation_ids = array($regId);
-		$message = array("title" => $sender, "content" => $content);
+		$message = array("title" => $sender, "content" => $content, "time" => $time);
 
 		$result = $this->gcm->send_notification($registation_ids, $message);
 	}

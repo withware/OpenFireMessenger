@@ -4,8 +4,14 @@
 
 package net.openfiresecurity.helper;
 
-import android.os.AsyncTask;
-import android.util.Log;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import net.openfiresecurity.helper.CustomMultiPartEntity.ProgressListener;
 
@@ -19,91 +25,93 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URLEncoder;
+import android.os.AsyncTask;
+import android.util.Log;
 
 public class MessageSender extends AsyncTask<String, Integer, String> {
 
-    @SuppressWarnings("deprecation")
-    @Override
-    protected String doInBackground(String... params) {
+	@SuppressWarnings("deprecation")
+	@Override
+	protected String doInBackground(String... params) {
 
-        String url = Constants.MSGURL + Constants.EXCHANGER;
-        String from = params[0];
-        String to = params[1];
-        String content = params[2];
-        String hash = params[3];
+		String url = Constants.MSGURL + Constants.EXCHANGER;
+		String from = params[0];
+		String to = params[1];
+		String content = params[2];
+		String hash = params[3];
 
-        HttpClient httpClient = new DefaultHttpClient();
+		HttpClient httpClient = new DefaultHttpClient();
 
-        HttpContext httpContext = new BasicHttpContext();
+		HttpContext httpContext = new BasicHttpContext();
 
-        HttpPost httpPost = new HttpPost(url);
-        try {
+		HttpPost httpPost = new HttpPost(url);
+		try {
 
-            CustomMultiPartEntity multipartContent = new CustomMultiPartEntity(
-                    HttpMultipartMode.BROWSER_COMPATIBLE,
-                    new ProgressListener() {
-                        @Override
-                        public void transferred(long num) {
-                        }
-                    });
+			CustomMultiPartEntity multipartContent = new CustomMultiPartEntity(
+					HttpMultipartMode.BROWSER_COMPATIBLE,
+					new ProgressListener() {
+						@Override
+						public void transferred(long num) {
+						}
+					});
 
-            multipartContent.addPart("from", new StringBody(from));
-            multipartContent.addPart("to", new StringBody(to));
-            multipartContent.addPart("content",
-                    new StringBody(URLEncoder.encode(content)));
-            multipartContent.addPart("hash", new StringBody(hash));
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm",
+					Locale.getDefault());
+			String currentTime = sdf.format(new Date());
 
-            httpPost.setEntity(multipartContent);
-            try {
-                HttpResponse httpResponse = httpClient.execute(httpPost,
-                        httpContext);
-                return (entityToString(httpResponse.getEntity()));
-            } catch (Exception exc) {
-                // signup.ErrorDialog(exc.getLocalizedMessage());
-                return (exc.getMessage());
-            }
-        } catch (Exception excp) {
-            // signup.ErrorDialog(excp.getLocalizedMessage());
-            return (excp.getMessage());
-        }
-    }
+			multipartContent.addPart("from", new StringBody(from));
+			multipartContent.addPart("to", new StringBody(to));
+			multipartContent.addPart("content",
+					new StringBody(URLEncoder.encode(content)));
+			multipartContent.addPart("hash", new StringBody(hash));
+			multipartContent.addPart("time",
+					new StringBody(URLEncoder.encode(currentTime)));
 
-    /**
-     * Converts HttpEntities into readable text.
-     *
-     * @param entity Entity, which should get converted to a String.
-     */
+			httpPost.setEntity(multipartContent);
+			try {
+				HttpResponse httpResponse = httpClient.execute(httpPost,
+						httpContext);
+				return (entityToString(httpResponse.getEntity()));
+			} catch (Exception exc) {
+				return (exc.getMessage());
+			}
+		} catch (Exception excp) {
+			return (excp.getMessage());
+		}
+	}
 
-    String entityToString(HttpEntity entity) {
+	/**
+	 * Converts HttpEntities into readable text.
+	 * 
+	 * @param entity
+	 *            Entity, which should get converted to a String.
+	 */
 
-        InputStream is = null;
+	String entityToString(HttpEntity entity) {
 
-        StringBuilder str = null;
-        try {
-            is = entity.getContent();
+		InputStream is = null;
 
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(is));
-            str = new StringBuilder();
+		StringBuilder str = null;
+		try {
+			is = entity.getContent();
 
-            String line = null;
-            while ((line = bufferedReader.readLine()) != null) {
-                str.append(line);
-            }
-        } catch (IOException e) {
-            Log.e(Constants.TAG, e.getMessage());
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                Log.e(Constants.TAG, e.getMessage());
-            }
-        }
-        return str.toString();
-    }
+			BufferedReader bufferedReader = new BufferedReader(
+					new InputStreamReader(is));
+			str = new StringBuilder();
+
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				str.append(line);
+			}
+		} catch (IOException e) {
+			Log.e(Constants.TAG, e.getMessage());
+		} finally {
+			try {
+				is.close();
+			} catch (IOException e) {
+				Log.e(Constants.TAG, e.getMessage());
+			}
+		}
+		return str.toString();
+	}
 }

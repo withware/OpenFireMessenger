@@ -4,18 +4,15 @@
 
 package net.openfiresecurity.receivers;
 
+import net.openfiresecurity.messenger.MainService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-
-import net.openfiresecurity.messenger.MainService;
 
 public class BootupReceiver extends BroadcastReceiver {
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        Log.d("Messenger", "Bootup!");
-        context.startService(new Intent(context, MainService.class));
-    }
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		context.startService(new Intent(context, MainService.class));
+	}
 }

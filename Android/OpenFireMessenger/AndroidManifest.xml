@@ -3,8 +3,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.openfiresecurity.messenger"
-    android:versionCode="18"
-    android:versionName="0.0.1.8" >
+    android:versionCode="30"
+    android:versionName="0.0.3.0" >
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -41,13 +41,15 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
+        android:name="org.holoeverywhere.app.Application"
         android:allowBackup="true"
         android:configChanges="orientation|keyboardHidden|screenSize"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:persistent="true"
         android:screenOrientation="portrait"
-        android:theme="@style/AppTheme"
+        android:theme="@style/Holo.Theme"
         android:windowSoftInputMode="stateUnchanged" >
         <activity
             android:name="net.openfiresecurity.messenger.Splash"
@@ -61,9 +63,12 @@
         <activity android:name="net.openfiresecurity.data.Preferences" />
         <activity
             android:name="MainView"
-            android:launchMode="singleTop" />
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity android:name="net.openfiresecurity.auth.AuthenticatorActivity" />
         <activity android:name="net.openfiresecurity.auth.SignUpActivity" />
+        <activity android:name="AddContact" />
 
         <service android:name="net.openfiresecurity.messenger.GCMIntentService" />
         <service android:name="net.openfiresecurity.auth.AuthenticatationService" >

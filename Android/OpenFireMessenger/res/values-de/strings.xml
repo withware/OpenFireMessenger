@@ -1,43 +1,53 @@
 <resources>
 
+    <!-- ActionBar -->
+    <string name="contacts">Kontakte</string>
     <string name="agreement">Ich akzeptiere die Lizenzvereinbarung.</string>
     <string name="app_name">OpenFireMessenger</string>
     <string name="autologin">Speichere Logindaten</string>
-    <string name="debug">Debug</string>
     <string name="email">Email</string>
-    <string name="error">Fehler</string>
     <string name="exit">Beenden</string>
-    <string name="login">Einloggen!</string>
     <string name="password">Passwort</string>
     <string name="passwordconfirm">Passwort bestätigen</string>
-    <string name="signup">Registrieren!</string>
-    <string name="success">Erfolg!</string>
-    <string name="update">Aktualisieren</string>
     <string name="username">Benutzername</string>
+    <string name="changelog">Änderungen</string>
+    <string name="changelogcontent">Version 0.0.3.0 BETA:\n\n*)ActionBarSherlock\n*)HoloEverywhere</string>
+    <string name="usernew">Neuer Benutzer?</string>
+    <string name="createaccount">Account erstellen</string>
+    <string name="useralready">Bereits registriert?</string>
+    <string name="prefs">Einstellungen</string>
+    <string name="accountadd">Kontakt hinzufügen</string>
+    <string name="right">Rechts</string>
+    <string name="left">Links</string>
 
-    <!-- GCM -->
-    <string name="title_activity_main">Push Notifications</string>
-    <string name="error_config">Please set the %1$s constant and recompile the app.</string>
-    <string name="already_registered">Device is already registered on server.</string>
-    <string name="gcm_registered">From GCM: device successfully registered!</string>
-    <string name="gcm_unregistered">From GCM: device successfully unregistered!</string>
-    <string name="gcm_message">From GCM: you got message!</string>
-    <string name="gcm_error">From GCM: error (%1$s).</string>
-    <string name="gcm_recoverable_error">From GCM: recoverable error (%1$s).</string>
-    <string name="gcm_deleted">From GCM: server deleted %1$d pending messages!</string>
-    <string name="server_registering">Trying (attempt %1$d/%2$d) to register device on Demo
-        Server.
-    </string>
-    <string name="server_registered">From Demo Server: successfully added device!</string>
-    <string name="server_unregistered">From Demo Server: successfully removed device!</string>
-    <string name="server_register_error">Could not register device on Demo Server after %1$d
-        attempts.
-    </string>
-    <string name="server_unregister_error">Could not unregister device on Demo Server (%1$s).
-    </string>
-    <string name="options_register">Register</string>
-    <string name="options_unregister">Unregister</string>
-    <string name="options_clear">Clear</string>
-    <string name="options_exit">Exit</string>
+    <!-- Preferences Start -->
+    <!-- DUMMY -->
+    <string name="prefs_title_"></string>
+    <string name="prefs_summary_"></string>
+    <string name="prefs_cat_"></string>
+    <!-- Categories -->
+    <string name="prefs_cat_general">Allgemein</string>
+    <string name="prefs_cat_general_appearance">Aussehen</string>
+    <string name="prefs_cat_chatsettings">Chat Einstellungen</string>
+    <string name="prefs_cat_chatappearance">Aussehen</string>
+    <string name="prefs_cat_chatcolor">Nachrichten Farbe</string>
+    <string name="prefs_cat_extra">Extras</string>
+    <string name="prefs_cat_notifications">Benachrichtigungen</string>
+    <string name="prefs_title_changelog">Zeige Versionsänderungen</string>
+    <string name="prefs_summary_changelog">Zeige \'Was ist neu?\', wenn die App aktualisiert
+        wurde.</string>
+    <string name="prefs_title_update">Automatische Aktualisierungen</string>
+    <string name="prefs_summary_update">Überprüfe automatisch für neue Versionen.</string>
+    <string name="prefs_title_chatfonts">Schriftart</string>
+    <string name="prefs_summary_chatfonts">Wähle die Schriftart der Nachrichten.\n(n) ist eine normale, (b) ist eine dicke, (l) ist eine dünne Schriftart.\nBedarf möglicherweise einen Neustart der Anwendung!</string>
+    <string name="prefs_title_notifysound">Töne</string>
+    <string name="prefs_summary_notifysound">Spiele einen Ton bei neuer Nachricht.</string>
+    <string name="prefs_title_notifyvibration">Vibration</string>
+    <string name="prefs_summary_notifyvibration">Vibriere bei neuer Nachricht.</string>
+    <string name="prefs_title_notifywakelock">Wakelock</string>
+    <string name="prefs_summary_notifywakelock">Schalte Bildschirm ein bei neuer Nachricht.</string>
+    <string name="prefs_title_general_animation">Zeige Animationen</string>
+
+    <!-- Preferences End -->
 
 </resources>

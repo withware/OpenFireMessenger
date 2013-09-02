@@ -22,13 +22,4 @@
             android:layout_toLeftOf="@+id/ibTitleCancel"
             android:src="@drawable/ic_settings"/>
 
-    <ImageView
-            android:id="@+id/ibTitleAddContact"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:src="@android:drawable/ic_input_add"
-            android:visibility="invisible"/>
-
 </RelativeLayout>

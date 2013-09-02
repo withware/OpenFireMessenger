@@ -4,80 +4,127 @@
 
 package net.openfiresecurity.fragments;
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import net.openfiresecurity.messenger.MainService;
-import net.openfiresecurity.messenger.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactsAdapter extends ArrayAdapter<String> {
+import net.openfiresecurity.messenger.R;
 
-    private final Context context;
-    private String[] names, emails;
+import org.holoeverywhere.LayoutInflater;
+import org.holoeverywhere.widget.TextView;
 
-    private List<String> namesList = new ArrayList<String>();
-    private List<String> emailsList = new ArrayList<String>();
+import android.content.Context;
+import android.database.Cursor;
+import android.support.v4.widget.CursorAdapter;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
-    public ContactsAdapter(Context context, String[] ids) {
-        super(context, R.layout.list_contact, ids);
-        this.context = context;
-        for (String s : ids) {
-            namesList.add(MainService.contactsDB.getName(Integer.parseInt(s)));
-            emailsList
-                    .add(MainService.contactsDB.getEmail(Integer.parseInt(s)));
-        }
-        names = namesList.toArray(new String[namesList.size()]);
-        emails = emailsList.toArray(new String[emailsList.size()]);
-    }
+public class ContactsAdapter extends CursorAdapter {
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+	final List<Contact> contacts = new ArrayList<Contact>();
 
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	public class Contact {
+		String id;
+		String name;
+		String email;
 
-        View rowView = inflater.inflate(R.layout.list_contact, parent, false);
+		public Contact(String id, String name, String email) {
+			this.id = id;
+			this.name = name;
+			this.email = email;
+		}
 
-        TextView contactName = (TextView) rowView
-                .findViewById(R.id.tvContactName);
+		public Contact get(int position) {
+			Cursor cursor = getCursor();
+			Contact contact = null;
+			if (cursor.moveToPosition(position)) {
+				contact = new Contact(cursor.getString(cursor
+						.getColumnIndex(cursor.getColumnName(0))),
+						cursor.getString(cursor.getColumnIndex(cursor
+								.getColumnName(1))), cursor.getString(cursor
+								.getColumnIndex(cursor.getColumnName(2))));
+			}
 
-        TextView contactLastMessage = (TextView) rowView
-                .findViewById(R.id.tvLastMessage);
+			return contact;
+		}
 
-        @SuppressWarnings("unused")
-        ImageView contactPicture = (ImageView) rowView
-                .findViewById(R.id.ivContactPicture);
-        contactName.setText(names[position]);
-        contactLastMessage.setText(emails[position]);
-        // Change the icon for Windows and iPhone
-        // String s = values[position];
-        // if (s.startsWith("iPhone")) {
-        // contactPicture.setImageResource(R.drawable.no);
-        // } else {
-        // contactPicture.setImageResource(R.drawable.ok);
-        // }
+		public void setId(String id) {
+			this.id = id;
+		}
 
-        return rowView;
-    }
+		public void setName(String name) {
+			this.name = name;
+		}
 
-    public void updateContacts(String[] ids) {
-        namesList.clear();
-        emailsList.clear();
-        for (String s : ids) {
-            namesList.add(MainService.contactsDB.getName(Integer.parseInt(s)));
-            emailsList
-                    .add(MainService.contactsDB.getEmail(Integer.parseInt(s)));
-        }
-        names = namesList.toArray(new String[namesList.size()]);
-        emails = emailsList.toArray(new String[emailsList.size()]);
-        notifyDataSetChanged();
-    }
+		public void setEmail(String email) {
+			this.email = email;
+		}
+
+		public String getId() {
+			return id;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public String getEmail() {
+			return email;
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	public ContactsAdapter(Context context, Cursor c) {
+		super(context, c);
+	}
+
+	/* ViewHolder for better performance */
+	static class ViewHolder {
+		TextView contactName;
+		TextView contactLastMessage;
+		ImageView contactPicture;
+		String id;
+		String name;
+		String email;
+	}
+
+	@Override
+	public void bindView(View view, Context arg1, Cursor c) {
+		ViewHolder holder = (ViewHolder) view.getTag();
+
+		holder.id = c.getString(c.getColumnIndex(c.getColumnName(0)));
+		holder.name = c.getString(c.getColumnIndex(c.getColumnName(2)));
+		holder.email = c.getString(c.getColumnIndex(c.getColumnName(1)));
+
+		contacts.add(new Contact(holder.id, holder.name, holder.email));
+
+		holder.contactName.setText(holder.name);
+		holder.contactLastMessage.setText(holder.email);
+	}
+
+	@Override
+	public Cursor swapCursor(Cursor newCursor) {
+		contacts.clear();
+		return super.swapCursor(newCursor);
+	}
+
+	@Override
+	public View newView(Context arg0, Cursor c, ViewGroup parent) {
+
+		View view = LayoutInflater.from(parent.getContext()).inflate(
+				R.layout.list_contact, parent, false);
+
+		ViewHolder holder = new ViewHolder();
+
+		holder.contactName = (TextView) view.findViewById(R.id.tvContactName);
+		holder.contactLastMessage = (TextView) view
+				.findViewById(R.id.tvLastMessage);
+		@SuppressWarnings("unused")
+		ImageView contactPicture = (ImageView) view
+				.findViewById(R.id.ivContactPicture);
+
+		view.setTag(holder);
+
+		return view;
+	}
 }

@@ -4,38 +4,30 @@
 
 package net.openfiresecurity.data;
 
-import android.os.Bundle;
-import android.preference.PreferenceActivity;
-
 import net.openfiresecurity.messenger.R;
 
-public class Preferences extends PreferenceActivity {
+import org.holoeverywhere.preference.PreferenceFragment;
 
-    @SuppressWarnings("deprecation")
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // add the prefernces.xml layout
-        addPreferencesFromResource(R.xml.prefs);
+import android.os.Bundle;
 
-        // get the specified preferences using the key declared in
-        // preferences.xml
-        // @NotNull
-        // ListPreference dataPref = (ListPreference) findPreference("date");
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
 
-        // get the description from the selected item
-        // dataPref.setSummary(dataPref.getEntry());
+public class Preferences extends SherlockPreferenceActivity {
 
-        // when the user choose other item the description changes too with the
-        // selected item
-        // dataPref.setOnPreferenceChangeListener(new
-        // Preference.OnPreferenceChangeListener() {
-        // @Override
-        // public boolean onPreferenceChange(@NotNull Preference preference,
-        // @NotNull Object o) {
-        // preference.setSummary(o.toString());
-        // return true;
-        // }
-        // });
-    }
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		addPreferencesFromResource(R.xml.prefs_inner);
+		// getSupportFragmentManager().beginTransaction()
+		// .add(new PrefFragment(), "PrefFragment").commit();
+	}
+
+	public static class PrefFragment extends PreferenceFragment {
+
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			addPreferencesFromResource(R.xml.prefs_inner);
+		}
+	}
 }
