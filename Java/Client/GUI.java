@@ -64,7 +64,7 @@ public class GUI {
 	// present working directory is stored here
 	String pwd = "";
         //Calander information
-	String calandr = Calendar.getInstance().getTime().toString();
+	String calandr=Calendar.getInstance().getTime().toString();
         //temporary for triming message
 	String trim = "";
         //User Name
@@ -92,11 +92,22 @@ public class GUI {
         PrintStream ps;
         FileInputStream fin;
 	BufferedReader br;
+        Image img;  
+        String color="WHITE";
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	GUI() {
 		try {
 		pwd = current_path.getCanonicalPath();
+                img = javax.imageio.ImageIO.read(new java.net.URL(getClass().getResource("Wallpaper/Test.jpg"), pwd+"/Wallpaper/Test.jpg"));
+                JViewport jvp = new JViewport()   
+                {  
+                public void paintComponent(Graphics g)  
+                {  
+                   super.paintComponent(g);  
+                   if(img != null) g.drawImage(img, 0,0,this.getWidth(),this.getHeight(),this);  
+                }  
+                };  
                 fl=new File(pwd + "/preference/Font.tof");
                 fin=new FileInputStream(fl);
 		br = new BufferedReader(new InputStreamReader(fin));
@@ -130,15 +141,21 @@ public class GUI {
 
 		// Main chat display box
 		chatWindow = new JTextArea();
+
 		chatWindow.setFont(new Font(FontStyle,Font.BOLD,FontSize));
+                chatWindow.setForeground(Color.WHITE);
+                chatWindow.setOpaque(false);  
 		chatWindowPane = new JScrollPane(chatWindow);
+                chatWindowPane.setViewport(jvp);  
+                chatWindowPane.setViewportView(chatWindow);
+
 		chatWindowPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		chatWindowPane.setBounds(10, 50, 350, 300);
 		chatWindow.setEditable(false);
 
 		// Dummy Message
 		chatWindow.setText("Chat initiated at: " + date + "\n\n");
-		frame.add(chatWindowPane);
+		frame.getContentPane().add(chatWindowPane);
 
 		// User area to type
 		typeWindow = new JTextArea();
@@ -151,13 +168,16 @@ public class GUI {
 			public void keyPressed(KeyEvent k) {
 				if (k.getKeyChar() == KeyEvent.VK_ENTER) {
 					if (k.isShiftDown()) {
-						typeWindow.append(" \n");
+						typeWindow.setText(null);
 					} else {
 						if (selected != user_name) {
-                                                        chatWindow.append(user_name+"\n");
+                                                        calandr= Calendar.getInstance().getTime().toString();
+                                                        chatWindow.append(user_name+" "+calandr.substring(calandr.lastIndexOf(":") - 5,calandr.lastIndexOf(":")) + " " + "\n");
                                                         chat_Out(user_name);
 							raw_msg(typeWindow.getText());
 							typeWindow.setText(null);
+				new Sender("http://localhost/exchanger.php", true,"from=123&to=321&content=" + typeWindow.getText(),
+						GUI.this).run();
 						} else {
 							JOptionPane.showMessageDialog(null,
 									"Contact not slected",
@@ -220,8 +240,7 @@ public class GUI {
 		frame.setSize(520, 510);
 		// dimension calculation to display frame at the centre of screen
 		dim = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setLocation((dim.width / 2) - (frame.getSize().width / 2),
-				(dim.height / 2) - (frame.getSize().height / 2));
+		frame.setLocation((dim.width / 2) - (frame.getSize().width / 2),(dim.height / 2) - (frame.getSize().height / 2));
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -268,8 +287,7 @@ public class GUI {
                                 iframe.setSize(200,300);
                   		// dimension calculation to display frame at the centre of screen
 		                dim = Toolkit.getDefaultToolkit().getScreenSize();
-                       		iframe.setLocation((dim.width / 2) - (iframe.getSize().width / 2),
-				(dim.height / 2) - (iframe.getSize().height / 2));
+                       		iframe.setLocation((dim.width / 2) - (iframe.getSize().width / 2),(dim.height / 2) - (iframe.getSize().height / 2));
 	                	iframe.setVisible(true);
 			}
 		});
@@ -278,13 +296,22 @@ public class GUI {
 		sendButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
-				new Sender("http://localhost/exchanger.php", true,
-						"from=123&to=321&content=" + typeWindow.getText(),
+                                                if (selected != user_name) {
+                                                        chatWindow.append(user_name+"\n");
+                                                        chat_Out(user_name);
+							raw_msg(typeWindow.getText());
+							typeWindow.setText(null);
+				new Sender("http://localhost/exchanger.php", true,"from=123&to=321&content=" + typeWindow.getText(),
 						GUI.this).run();
 				// TODO Display Sent Message in Chat Window as well
 				// Temporary just adding content of the text area
-				chatWindow.append(typeWindow.getText() + "\n");
+						} else {
+							JOptionPane.showMessageDialog(null,
+									"Contact not slected",
+									"Team OpenFire Messenger",
+									JOptionPane.WARNING_MESSAGE);
+						}
+
 			}
 		});
 
@@ -292,27 +319,24 @@ public class GUI {
 		getButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new Sender("http://localhost/exchanger.php", true,
-						"from=123&to=321", GUI.this).run();
+				new Sender("http://localhost/exchanger.php", true,"from=123&to=321", GUI.this).run();
 			}
 		});
-		} catch (Exception x) {}
+		} catch (Exception x) {System.err.println(x);}
 	}
 
 	public String raw_msg(String raw_msg) {
 		String msg = raw_msg;
 		bi.setText(raw_msg);
-		if (raw_msg.length() > 40) {
-			int preceding = bi.following(40);
+		if (raw_msg.length() > (40-FontSize)) {
+			int preceding = bi.following(40-FontSize);
 			msg = raw_msg.substring(0, preceding);
-			chatWindow.append(calandr.substring(calandr.lastIndexOf(":") - 5,
-							calandr.lastIndexOf(":")) + " " + msg.trim() + "\n");
+			chatWindow.append(msg.trim() + "\n");
                         chat_Out(msg);
 			raw_msg = message(raw_msg.trim(), msg.length());
 		} else {
-			chatWindow.append(calandr.substring(calandr.lastIndexOf(":") - 5,
-							calandr.lastIndexOf(":")) + " " + msg.trim() + "\n");
-                        chat_Out(msg+"\n");
+			chatWindow.append(msg.trim() + "\n");
+                        chat_Out(msg);
 		}
 		return raw_msg;
 	}
@@ -322,21 +346,8 @@ public class GUI {
 		return raw_msg(trim);
 	}
 
-	/**
-	 * Reads the Contacts from /contacts/contacts.tof
-	 */
-	public void contacts() throws Exception {
-		String name = "";
-		pwd = current_path.getCanonicalPath();
-		fin = new FileInputStream(pwd+ "/contacts/contacts.tof");
-		br = new BufferedReader(new InputStreamReader(fin));
-		while ((name = br.readLine()) != null) {
-			_contacts.add(name);
-		}
-		br.close();
-	}
-
-        public void chat_Out(String messg) {
+	
+      public void chat_Out(String messg) {
                 try{
                 String msg_out=messg;
                 fl=new File(pwd + "/chat/" + selected + ".tof");
@@ -344,11 +355,11 @@ public class GUI {
                 ps=new PrintStream(fos);
                 if(msg_out.equals(selected)||msg_out.equals(user_name))
                 {
-                ps.println(msg_out.trim());
+                ps.println(msg_out.trim()+" "+calandr.substring(calandr.lastIndexOf(":") - 5,calandr.lastIndexOf(":")));
                 }
                 else
                 {
-                ps.println(calandr.substring(calandr.lastIndexOf(":") - 5,calandr.lastIndexOf(":")) + " " + msg_out.trim());
+                ps.println(msg_out.trim());
                 }
                 System.out.println(msg_out);
                 }catch(Exception z){} 
@@ -368,6 +379,20 @@ public class GUI {
                 }catch(Exception x){}
                 }
 
+         /**
+	 * Reads the Contacts from /contacts/contacts.tof
+	 */
+	public void contacts() throws Exception {
+		String name = "";
+		pwd = current_path.getCanonicalPath();
+		fin = new FileInputStream(pwd+ "/contacts/contacts.tof");
+		br = new BufferedReader(new InputStreamReader(fin));
+		while ((name = br.readLine()) != null) {
+			_contacts.add(name);
+		}
+		br.close();
+	}
+ 
 	public static void main(String[] arg) {
 		new GUI();
 	}

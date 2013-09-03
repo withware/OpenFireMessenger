@@ -1,14 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- ~ Copyright (c) 2013. Alexander Martinz. -->
+<?xml version="1.0" encoding="utf-8"?><!-- ~ Copyright (c) 2013. Alexander Martinz. -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.openfiresecurity.messenger"
-    android:versionCode="30"
-    android:versionName="0.0.3.0" >
+    android:versionCode="31"
+    android:versionName="0.0.3.1">
 
     <uses-sdk
         android:minSdkVersion="10"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -50,10 +49,10 @@
         android:persistent="true"
         android:screenOrientation="portrait"
         android:theme="@style/Holo.Theme"
-        android:windowSoftInputMode="stateUnchanged" >
+        android:windowSoftInputMode="stateUnchanged">
         <activity
             android:name="net.openfiresecurity.messenger.Splash"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -71,25 +70,23 @@
         <activity android:name="AddContact" />
 
         <service android:name="net.openfiresecurity.messenger.GCMIntentService" />
-        <service android:name="net.openfiresecurity.auth.AuthenticatationService" >
+        <service android:name="net.openfiresecurity.auth.AuthenticatationService">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" >
-                </action>
+                <action android:name="android.accounts.AccountAuthenticator"></action>
             </intent-filter>
 
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" >
-            </meta-data>
+                android:resource="@xml/authenticator"></meta-data>
         </service>
         <service android:name="MainService" />
 
-        <receiver android:name="net.openfiresecurity.receivers.MessageReceiver" >
+        <receiver android:name="net.openfiresecurity.receivers.MessageReceiver">
             <intent-filter>
                 <action android:name="net.openfiresecurity.messenger.DISPLAY_MESSAGE" />
             </intent-filter>
         </receiver>
-        <receiver android:name="net.openfiresecurity.receivers.BootupReceiver" >
+        <receiver android:name="net.openfiresecurity.receivers.BootupReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
 
@@ -98,7 +95,7 @@
         </receiver>
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
 
                 <!-- Receives the actual messages. -->
